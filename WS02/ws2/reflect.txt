@@ -1,0 +1,28 @@
+By doing this workshop I learned how to read records from a text file using an input file stream object. This was achieved by writing the 1 argument constructor for the RecordSet module I also learned how to count the number of records in a textfile by using 
+while (getline(f,word,' '))
+			{
+				wordCount++;
+			}
+I also learned how to monitor the time spent for a task using the chrono library and this was achienved by coding the TimedEvents module. In addition I learned how to code an rvalue and lvalue assignment operator and use them in the move constructor and copy constructor. Below is the code I used for writing the rvalue assignment operator:
+RecordSet& RecordSet::operator=(RecordSet&& src) {
+		if (this != &src)
+		{
+			if (words != nullptr || src.words == nullptr)
+			{
+				deleteWords();
+				numberOfWords = 0;
+			}
+			if (src.words != nullptr)
+			{
+				numberOfWords = src.size();
+				src.numberOfWords = 0;
+				words = src.words;
+				src.words = nullptr;
+			}
+
+		}
+
+		return *this;
+	}
+
+I also learned that a move operation is very faster than a copy operation and that is because in a move operation we are not creating all the object members from beginning but we are just making the new object values to point to the old object values address in memory and then we empty the old object but in a copy operation we copy each value of the src object to the current object and we should allocate new memory for it and that is why it takes a longer time.

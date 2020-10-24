@@ -1,0 +1,34 @@
+By doing this workshop I learned how to design and code composition and aggregation class relationships. In our code the relationship between the Reastaurant and Reservation class is a composition relationship because it implements complete ownership and the Restaurant class owns Reservation class and is responsible for creating and destroying Reservation objects at or before its own destruction. We implement this composition relationship because the Restaurant class manages a dynamic array of Reservation objects : 
+class Restaurant
+	{
+	public:
+		Restaurant();
+		Restaurant(Restaurant& src);
+		Restaurant(Restaurant&& src);
+		Restaurant(Reservation* reservations[], size_t cnt);
+		~Restaurant();
+		size_t size() const;
+		friend ostream& operator<<(ostream& os, const Restaurant& r);
+
+	private:
+		Reservation* reservations;
+		size_t numberOfReservations;
+	};
+
+On the other hand the relationship between ConfirmationSender and Reservation class is an aggregation because the ConfirmationSender class is not responsible for creating or destroying the Reservation objects that it uses and it just hold an array of pointers to Reservation objects and not the object itself and the Reservations used inside of ConfirmationSender do not get destroyed by destruction of ConfirmationSender:
+class ConfirmationSender
+	{
+	public:
+		ConfirmationSender();
+		ConfirmationSender(ConfirmationSender& src);
+		ConfirmationSender(ConfirmationSender&& src);
+		~ConfirmationSender();
+		ConfirmationSender& operator+=(const Reservation& res);
+		ConfirmationSender& operator-=(const Reservation& res);
+		friend ostream& operator<<(ostream& os, const ConfirmationSender& c);
+
+	private:
+		const Reservation** reservations;
+		size_t numberOfReservations;
+	};
+Moreover, the difference between the implementations of move and copy functions in a composition and an aggregation is that in compositon inside the copy or move function we copy or move the Reservation objects into a new restaurant object but in aggregation inside the copy or move function we only copy or move the pointers to Reservation objects into a new ConfirmationSender object and we do not copy the objects itself and when we destroy a ConfirmationSender object we only destroy the pointers that it had and not the actual Reservation objects.

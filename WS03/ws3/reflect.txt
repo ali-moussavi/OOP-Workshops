@@ -1,0 +1,41 @@
+By doing this workshop I learned how to code a class template and the correct syntax and design to use by coding Pair ,PairSummable, Set and SetSummable classes. In addition I learned how to create an static member in a template class and that when we have static member we should define it outside the class definition (initial and minFieldWidth in PairSummable). I also learned how to specialize a template class variable for a particular type by specializing the initial variable:
+template<typename K,typename V>
+	V PairSummable<K, V>::initial = "";
+
+	template<>
+	string PairSummable<string , string>::initial = "";
+
+	template<>
+	int PairSummable<string, int>::initial = 0;
+later we used the initial variable as the default value for the constructor of PairSummable class so we can initialize a PairSummable object with a one argument constructor and that is the reason we specialize the initial variable based on the type of our value if tha value is an int we want the initial to be an int and if it is an string want the initial to be an string too:
+PairSummable(const K& key, const V& value = initial) : Pair<K, V>(key, value) {
+
+			if (key.size() > minFieldWidth)
+			{
+				minFieldWidth = key.size();
+			}
+		}
+
+I also learned how to specialize a member function of a template class for a particular type by specializing the += operator for Pairsummable class:
+template<>
+	PairSummable<string, string> PairSummable<string, string>::operator+=(const PairSummable<string, string>& src) {
+		
+		if (this->key() == src.key() && this != &src)
+		{
+			if (this->value() == "")
+			{
+				PairSummable temp(this->key(), src.value());
+				*this = temp;
+			}
+			else
+			{
+				PairSummable temp(this->key(), this->value() + ", " + src.value());
+				*this = temp;
+			}
+			
+		}
+
+		return *this;
+	}
+The reason that we specilazed the += operator for PairSummable class was that we wanted different procedures to be done on the value of our PairSummable object based on the particular types (string or int).
+In addition I learned how to instantiate a template class by instantiation of PairSummable and SetSummable;
